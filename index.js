@@ -36,8 +36,8 @@ if (
   logDanger(`Label replacement instead of deleting will be added (maybe...)`);
   logDanger(`----------------------------------------------------------------\n`);
 
-  logInfo(`$GITHUB_TOKEN env variable MUST be provided!`);
-  logInfo(`'labels-to-add.json' and 'labels-to-remove.json' **SHOULD** be in CWD\n`);
+  log(`$GITHUB_TOKEN env variable MUST be provided!`);
+  log(`'labels-to-add.json' and 'labels-to-remove.json' **SHOULD** be in CWD\n`);
   logInfo(`json:`);
   log(`[ { "name": "closed: completed", "color": "#d93f0b" }, ... ]\n`);
 
