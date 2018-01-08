@@ -1,0 +1,24 @@
+{
+  "name": "@opuscapita/git-label-cli",
+  "version": "0.0.5",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./index"
+  },
+  "files": [
+    "README.md",
+    "index.js"
+  ],
+  "bin": {
+    "git-label": "index.js"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "chalk": "2.3.0",
+    "git-label": "4.1.1"
+  }
+}

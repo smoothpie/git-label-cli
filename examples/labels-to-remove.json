@@ -1,0 +1,10 @@
+[
+  { "name": "bug", "color": "#fff" },
+  { "name": "enhancement", "color": "#fff" },
+  { "name": "duplicate", "color": "#fff" },
+  { "name": "good first issue", "color": "#fff" },
+  { "name": "help wanted", "color": "#fff" },
+  { "name": "invalid", "color": "#fff" },
+  { "name": "question", "color": "#fff" },
+  { "name": "wontfix", "color": "#fff" }
+]

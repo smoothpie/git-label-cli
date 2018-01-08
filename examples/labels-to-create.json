@@ -1,0 +1,8 @@
+[
+  { "name": "closed: completed", "color": "#d93f0b" },
+  { "name": "closed: duplicate", "color": "#d93f0b" },
+  { "name": "closed: wontfix", "color": "#d93f0b" },
+  { "name": "requested by: myFavoriteCustomer", "color": "#0052cc" },
+  { "name": "type: bug", "color": "#1d76db" },
+  { "name": "type: enhancement", "color": "#1d76db" }
+]
