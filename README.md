@@ -8,8 +8,8 @@ Create and remove labels across GitHub repositories
 
 ## Examples:
 
-`./run.sh -- opuscapita/git-label-cli`
-`./run.sh --repositories-json`
+`git-label -- opuscapita/git-label-cli`
+`git-label --repositories-json`
 
 **repositories.json** example:
 
