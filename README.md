@@ -51,7 +51,7 @@ Create and remove labels across GitHub repositories
 
 ## Related projects
 
-[https://github.com/jasonbellamy/git-label](git-label)
+[git-label](https://github.com/jasonbellamy/git-label)
 
 ## License
 
