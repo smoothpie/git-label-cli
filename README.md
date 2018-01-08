@@ -13,7 +13,7 @@ Create and remove labels across GitHub repositories
 
 **repositories.json** example:
 
-```
+```json
 [
   "github_user/repo-1",
   "github_user/repo-2",
@@ -23,7 +23,7 @@ Create and remove labels across GitHub repositories
 
 **labels-to-create.json** example:
 
-```
+```json
 [
   { "name": "closed: completed", "color": "#d93f0b" },
   { "name": "closed: duplicate", "color": "#d93f0b" },
@@ -36,7 +36,7 @@ Create and remove labels across GitHub repositories
 
 **labels-to-remove.json** example:
 
-```
+```json
 [
   { "name": "bug" },
   { "name": "enhancement" },
