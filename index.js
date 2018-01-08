@@ -42,8 +42,8 @@ if (
   log(`[ { "name": "closed: completed", "color": "#d93f0b" }, ... ]\n`);
 
   logInfo(`Examples:`);
-  log(`$ ./run.sh -- opuscapita/minsk-core-sandbox opuscapita/test-circleci-release-process`);
-  log(`$ ./run.sh --repositories-json\n`);
+  log(`$ git-label -- opuscapita/minsk-core-sandbox opuscapita/test-circleci-release-process`);
+  log(`$ git-label --repositories-json\n`);
 
   log(`Issues: https://github.com/OpusCapita/git-label-cli/issues\n\n`);
 
