@@ -10,7 +10,9 @@ let labelsToCreatePath = path.join(process.cwd(), `./labels-to-create.json`);
 let labelsToCreate = fs.existsSync(labelsToCreatePath) ? require(labelsToCreatePath) : [];
 
 let labelsToRemovePath = path.join(process.cwd(), './labels-to-remove.json');
-let labelsToRemove = fs.existsSync(labelsToRemovePath) ? require(labelsToRemovePath) : [];
+let labelsToRemove = fs.existsSync(labelsToRemovePath) ?
+    require(labelsToRemovePath).map(label => ({ ...label, color: '#fff' })) :
+    [];
 
 let log = msg => console.log(msg);
 let logDanger = msg => console.log(chalk.red.bold(msg));
