@@ -50,6 +50,16 @@ Create and remove labels across GitHub repositories
 ]
 ```
 
+**labels-to-update.json** example:
+
+```js
+[
+  { "currentName": "completed", "name": "closed: completed", "color": "#d93f0b" },
+  { "currentName": "duplicate", "name": "closed: duplicate" },
+  { "currentName": "requested by: myFavoriteCustomer", "color": #1d76db" }
+]
+```
+
 ## Related projects
 
 [git-label](https://github.com/jasonbellamy/git-label)
