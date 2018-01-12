@@ -56,7 +56,7 @@ Create and remove labels across GitHub repositories
 [
   { "currentName": "completed", "name": "closed: completed", "color": "#d93f0b" },
   { "currentName": "duplicate", "name": "closed: duplicate" },
-  { "currentName": "requested by: myFavoriteCustomer", "color": #1d76db" }
+  { "currentName": "requested by: myFavoriteCustomer", "color": "#1d76db" }
 ]
 ```
 
