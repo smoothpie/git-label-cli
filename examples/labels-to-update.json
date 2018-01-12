@@ -1,6 +1,5 @@
 [
-  {
-    "oldName": "feature",
-    "newName": "type: feature"
-  }
+  { "currentName": "completed", "name": "closed: completed", "color": "#d93f0b" },
+  { "currentName": "duplicate", "name": "closed: duplicate" },
+  { "currentName": "requested by: myFavoriteCustomer", "color": "#1d76db" }
 ]

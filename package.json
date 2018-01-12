@@ -3,7 +3,7 @@
   "version": "0.0.9",
   "main": "index.js",
   "scripts": {
-    "start": "babel-node ./index"
+    "start": "node ./index"
   },
   "files": [
     "README.md",
@@ -19,12 +19,6 @@
   "license": "Apache-2.0",
   "dependencies": {
     "axios": "^0.17.1",
-    "chalk": "2.3.0",
-    "git-label": "4.1.1"
-  },
-  "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-es2017": "^6.24.1"
+    "chalk": "2.3.0"
   }
 }
