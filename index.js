@@ -2,15 +2,9 @@
 
 var fs = require('fs');
 let path = require('path');
-let readline = require('readline');
 let chalk = require('chalk');
 let packageInfo = require('./package.json');
 let axios = require('axios');
-
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
 
 let labelsToUpdatePath = path.join(process.cwd(), `./labels-to-update.json`);
 let labelsToUpdate = fs.existsSync(labelsToUpdatePath) ? require(labelsToUpdatePath) : [];
@@ -65,7 +59,7 @@ let repositories = repositoriesSelectionMethod === 'FROM_FILE' ?
     require(path.join(process.cwd(), './repositories.json')) :
     process.argv.slice(2, process.argv.length);
 
-async function getIssuesForRepo(api, repository, token) {
+async function getIssuesForRepo({api, repository, token}) {
   try {
     let response = await axios.get(
       `${api}/repos/${repository}/issues`,
@@ -78,54 +72,50 @@ async function getIssuesForRepo(api, repository, token) {
   }
 }
 
-async function getLabelsForIssue(api, repository, issue, token) {
+async function getLabelsForIssue({api, repository, token}, issue) {
   try {
     let response = await axios.get(
       `${api}/repos/${repository}/issues/${issue.number}/labels`,
       { 'headers': { 'Authorization': `token ${token}` } })
 
-    fs.readFile("used-labels.json.bak", 'utf8', function(err, json) {
-      let backup = JSON.parse(json);
-      backup.push({
-        "issue": issue.number,
-        "labels": response.data
-      });
-      fs.writeFile('used-labels.json.bak', JSON.stringify(backup), (err) => {
-        if (err) throw err;
-      });
-    });
+    let labelBackup = {
+      "repository": repository,
+      "issue": issue.number,
+      "labels": response.data
+    };
 
-    return response.data
+    return labelBackup;
   }
+
   catch(error) {
     console.log(error);
   }
 }
 
-async function getUsedLabels(api, repository, token) {
-  let issues = await getIssuesForRepo(api, repository, token);
-  fs.writeFile('used-labels.json.bak', '[]', null);
+async function getUsedLabels({api, repository, token}) {
+  let issues = await getIssuesForRepo({api, repository, token});
   let usedLabels = await Promise.all(issues.map(issue => {
-    return getLabelsForIssue(api, repository, issue, token)
+    return getLabelsForIssue({api, repository, token}, issue)
   }));
+
   return usedLabels;
 }
 
-async function prepareForDelete(api, repository, token, labelsToRemove) {
-  let usedLabels = [...new Set([].concat(...await getUsedLabels(api, repository, token)))];
-  let betterForUpdate = [];
-  labelsToRemove.forEach(label => {
-    usedLabels.forEach(usedlabel => {
-      if (usedlabel.name.indexOf(label.name) !== -1) {
-        logDanger(`label "${label.name}" is currently used in issues. For label replacement better use "labels-to-update".`)
-        betterForUpdate.push(label);
-      }
-    })
+async function createBackup({ api, repository, token }) {
+  let backup = [];
+  let usedLabels = await getUsedLabels({ api, repository, token });
+  backup.push(usedLabels);
+
+  let currentDate = new Date();
+  fs.writeFile(`used-labels-${currentDate.toISOString()}.json.bak`, JSON.stringify(backup), (err) => {
+    if (err) throw err;
   });
-  return betterForUpdate
+
+  console.log("Your labels were saved to 'used-labels.json.bak'.");
+  return backup;
 }
 
-async function deleteLabel(api, repository, token, label) {
+async function deleteLabel({api, repository, token}, label) {
   try {
     await axios.delete(
       `${api}/repos/${repository}/labels/${label.name}`,
@@ -137,26 +127,13 @@ async function deleteLabel(api, repository, token, label) {
 }
 
 async function deleteLabels({api, repository, token}, labelsToRemove) {
-  let betterForUpdate = await prepareForDelete(api, repository, token, labelsToRemove);
-  if (!betterForUpdate.length) {
-    labelsToRemove.forEach(label => {
-      return deleteLabel(api, repository, token, label)
-    })
-  } else {
-    rl.question("Delete any way? [Y / N]" + '\n', (answer) => {
-      rl.close();
-      process.stdin.destroy();
-      if (answer.toUpperCase() === "Y") {
-        labelsToRemove.forEach(label => {
-          return deleteLabel(api, repository, token, label)
-        })
-        console.log(`Removed ${labelsToRemove.length} labels`);
-      }
-    });
-  }
+  labelsToRemove.forEach(label => {
+    return deleteLabel({api, repository, token}, label)
+  })
+  console.log(`Removed ${labelsToRemove.length} labels`);
 }
 
-async function updateLabel(api, repository, token, label) {
+async function updateLabel({api, repository, token}, label) {
   let keys = Object.keys(label);
   let filteredKeys = keys.slice(1, keys.length);
   let updatedLabel = {};
@@ -180,12 +157,12 @@ async function updateLabel(api, repository, token, label) {
 
 async function updateLabels({api, repository, token}, labelsToUpdate) {
   labelsToUpdate.forEach(label => {
-    return updateLabel(api, repository, token, label);
+    return updateLabel({api, repository, token}, label);
   });
   console.log(`Updated ${labelsToUpdate.length} labels`);
 }
 
-async function createLabel(api, repository, token, label) {
+async function createLabel({api, repository, token}, label) {
   let color = label.color.replace('#', '');
   try {
     let response = await axios.post(
@@ -207,7 +184,7 @@ async function createLabel(api, repository, token, label) {
 
 async function createLabels({api, repository, token}, labelsToCreate) {
   labelsToCreate.forEach(label => {
-    return createLabel(api, repository, token, label);
+    return createLabel({api, repository, token}, label);
   });
   console.log(`Created ${labelsToCreate.length} labels`);
 }
@@ -219,8 +196,6 @@ function applyLabels({ api, repository, token, labelsToUpdate, labelsToCreate, l
 	  token
   };
 
-  console.log("Your labels were saved to 'used-labels.json.bak'.");
-
   updateLabels(config, labelsToUpdate);
 
   createLabels(config, labelsToCreate);
@@ -229,6 +204,11 @@ function applyLabels({ api, repository, token, labelsToUpdate, labelsToCreate, l
 }
 
 repositories.forEach(repository => {
+  createBackup({
+    api: 'https://api.github.com',
+    repository,
+    token: process.env.GITHUB_TOKEN
+  });
   applyLabels({
 	  api: 'https://api.github.com',
 	  repository,
