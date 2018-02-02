@@ -116,9 +116,10 @@ async function createBackup({ api, repository, token }) {
 }
 
 async function deleteLabel({api, repository, token}, label) {
+  let name = encodeURIComponent(label.name);
   try {
     await axios.delete(
-      `${api}/repos/${repository}/labels/${label.name}`,
+      `${api}/repos/${repository}/labels/${name}`,
       { 'headers': { 'Authorization': `token ${token}` } });
   }
   catch(error) {
