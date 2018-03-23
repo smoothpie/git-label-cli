@@ -8,7 +8,7 @@ Create and remove labels across GitHub repositories
 
 ## Examples:
 
-`git-label opuscapita/git-label-cli`
+`git-label smoothpie/git-label-cli`
 
 `git-label --repositories-json`
 
